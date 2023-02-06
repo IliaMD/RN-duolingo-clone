@@ -1,20 +1,33 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from "react";
+import { Text, View } from "react-native";
+import { styles } from "./App.styles";
+import { ImageOption, Button } from "./src/components";
+import data from "./assets/data/data";
 
-export default function App() {
+const App = () => {
+  const [isSelected, setIsSelected] = useState(null);
+
+  const onBtnPress = () => {};
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+    <View style={styles.root}>
+      <Text style={styles.title}>{data.question}</Text>
+      <View style={styles.optionsContainer}>
+        {data.options.map((option) => {
+          return (
+            <ImageOption
+              key={option.id}
+              image={option.image}
+              text={option.text}
+              isSelected={isSelected?.id === option.id}
+              onPress={() => setIsSelected(option)}
+            />
+          );
+        })}
+      </View>
+      <Button text="Check" onPress={onBtnPress} disabled={!isSelected} />
     </View>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
