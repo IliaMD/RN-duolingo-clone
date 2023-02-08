@@ -1,31 +1,38 @@
-import React, { useState } from "react";
-import { Text, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Alert, View } from "react-native";
 import { styles } from "./App.styles";
-import { ImageOption, Button } from "./src/components";
-import data from "./assets/data/data";
+import { MultipleChoiceQuest, OpenEndedQuest } from "./src/components";
+import data from "./assets/data/data2";
 
 const App = () => {
-  const [isSelected, setIsSelected] = useState(null);
+  const [indexQuest, setIndexQuest] = useState(0);
+  const [currentQuest, setCurrentQuestion] = useState(data[indexQuest]);
 
-  const onBtnPress = () => {};
+  useEffect(() => {
+    if (indexQuest >= data.length) {
+      Alert.alert("You finished the quiz");
+      setIndexQuest(0);
+    } else {
+      setCurrentQuestion(data[indexQuest]);
+    }
+  }, [indexQuest]);
+
+  const onCorrect = () => {
+    setIndexQuest((prev) => prev + 1);
+  };
+
+  const onWrong = () => {
+    Alert.alert("Wrong answer");
+  };
 
   return (
     <View style={styles.root}>
-      <Text style={styles.title}>{data.question}</Text>
-      <View style={styles.optionsContainer}>
-        {data.options.map((option) => {
-          return (
-            <ImageOption
-              key={option.id}
-              image={option.image}
-              text={option.text}
-              isSelected={isSelected?.id === option.id}
-              onPress={() => setIsSelected(option)}
-            />
-          );
-        })}
-      </View>
-      <Button text="Check" onPress={onBtnPress} disabled={!isSelected} />
+      {/* <MultipleChoiceQuest
+        question={currentQuest}
+        onCorrect={onCorrect}
+        onWrong={onWrong}
+      /> */}
+      <OpenEndedQuest />
     </View>
   );
 };
